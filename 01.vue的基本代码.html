@@ -1,0 +1,103 @@
+<pre >
+<h2>
+1 如何定义一个基本的Vue代码结构 
+2 插值表达式和 v-text
+3 v-cloak 
+4 v-html
+5 v-bind Vue提供的属性绑定机制 缩写是 : 
+6 v-on Vue 提供的事件绑定机制 缩写是 @
+</h2>
+</pre>
+
+
+<!DOCTYPE html> 
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <style>
+    [v-cloak]{
+      display: none;    
+    }
+  </style>
+  <body>
+
+
+    <!--将来new的Vue的实例会控制这个元素的所有内容-->
+
+    <div id="app">
+
+
+
+      使用v-cloak能够解决差值表达式闪烁的问题
+      
+      <p v-cloak>{{ msg }}</p>
+      <h4 v-text='msg'></h4>  
+
+      v-text 不会出现闪烁问题 <br>
+      v-txt会覆盖元素中原本的内容，但是插值表达式只会替换自己的占位符不会把整个内容清空
+
+      <br><br><br>
+
+
+      <div>{{msg2}}</div>
+      <div v-text='msg2'></div>
+      <div v-html='msg2'>lalallalalala</div> 
+      v-htm 和 v-text一样都会覆盖标签中的内容
+
+
+      <br><br><br>
+
+
+
+      v-bind 是vue中提供的绑定属性的指令 v-bind会把引号中的内容当成表达式
+      <br><br><br>
+      <input type="button" value="Button1" v-bind:title='mytitle + "123"'>  这个标签用v-blind生成   <br> 
+      <input type="button" value="Button2" :title='mytitle + "123"'>  这个Button由:title（简写）绑定生成   <br>
+      冒号等于v-bind
+
+
+      <br><br><br>
+
+
+
+      Vue中提供了 v-on：事件绑定机制 <br><br>
+      <input type="button" value="Button3" :title='mytitle' v-on:click="alert('U clicked BTN')">   词条命令运行会出错，因为在新建的Vue变量中没有alert方法 2
+      <br>
+      <input type="button" value="Button4" :title='mytitle' v-on:click='show'>   此命令会触发Vue变量中的methods中的show方法 <br>
+      <input type="button" value="Button5" :title='mytitle' @click='show'>   v-on: 简写成 @
+
+
+    </div>
+
+    <script src="./lib/vue.js"></script> 
+  
+
+
+    <script>
+
+
+      
+      var vm = new Vue({
+        el: "#app", //当前我们new的这个Vue实例要控制页面上的哪个区域
+        data: {
+          //data属性中，参访的是el中要用到的数据
+          msg: "HelloWorld",
+          msg2:'<h1>I am the H1 tag </h1>',
+          mytitle: '这是一个自己定义的title' 
+        },
+        methods: {
+          show: function(){
+            alert('hello');
+          }
+        },
+      });
+    </script>
+
+
+
+  </body>
+</html>

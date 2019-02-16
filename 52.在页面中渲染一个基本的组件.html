@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="./lib/vue.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+
+    <div id="app">
+        <p>啦啦啦</p>
+        <login>
+
+        </login>
+    </div>
+
+    <script>
+        var login = {
+            template: '<h1>登陆</h1>'
+        }
+        var register = {
+            template: '<h1>注册</h1>'
+        }
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                
+            },
+            methods: {
+                
+            },
+            components:{
+                login,
+                register,
+            }
+        })
+    </script>
+</body>
+</html>

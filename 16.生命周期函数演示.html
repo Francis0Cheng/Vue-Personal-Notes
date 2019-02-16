@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="./lib/vue.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <input type="button" value="Button" @click="msg='No'">
+        <h3 id='h3'>{{msg}}</h3>
+    </div>
+    <script>
+        var vm = new Vue(
+            {
+                el: '#app',
+                data:{
+                    msg:'ok'
+                },
+                methods: {
+                    show(){
+                        console.log('执行了')
+                    }
+                },
+                beforeCreate() {
+                    //这是遇到的第一个生命周期函数表示实例完全会被创建出来，会执行
+                       console.log(this.msg)  //这时候console会显示undefined
+                       this.show()   //this.show is not a method
+                       //注意在beforeCreate生命周期函数执行的时候，data和methods中的数据都还没有被初始化
+                },
+                created() {
+                    //这是遇到的第二个生命周期函数
+                        console.log(this.msg)
+                        this.show()
+                        //在created中，data和methods都已经初始化好了
+                        //如果要调用methods中的方法，最早只能在created中操作
+                        
+                },
+                beforeMount() {
+                    //这是遇到的第3个生命周期函数，表示模板已经编译完成，但是尚未把模板渲染到页面中去
+                    console.log(document.getElementById('h3').innerText)
+                    //在beforeMount执行的时候，页面中的元素没有被真正替换过来，只是之前的一些模板字符串
+                    
+                },
+                mounted() {
+                    //这是遇到的第四个生命周期函数，表示内存中的模板，已经真实的挂载到了浏览器的页面中，用户已经看到了渲染好的页面
+                    console.log(document.getElementById('h3').innerText)
+                    //注意：mounted是实例创建中的最后一个生命周期函数，当执行完mounted，实例就完全被创建好了
+                },
+                beforeUpdate() {
+                    console.log('界面上元素的内容'+document.getElementById('h3').innerText)
+                    console.log('data中的msg数据是'+this.msg)
+                },
+                updated() {
+                    console.log('界面上元素的内容' + document.getElementById('h3').innerText)
+                    console.log('data中的msg数据是' + this.msg)
+                    //页面和data数据已经保持一致了
+                },
+            }
+        )
+    </script>
+</body>
+</html>

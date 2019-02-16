@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="./lib/vue.js"></script>
+    <script src="./lib/vue-router.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <router-link to='/account'>Account</router-link>
+
+        
+        <router-view></router-view>
+    </div>
+    <template id='tmp1'>
+        <div>
+            <h1>这是Account 组件</h1>
+            <router-link to='/account/login'>登陆</router-link>
+            <router-link to="/account/register">注册</router-link> 
+            <router-view></router-view>
+        </div>
+    </template>
+    <script>
+        var account = {
+            template: '#tmp1'
+        }
+        var login = {
+            template:'<h3>登陆</h3>'
+        }
+        var register = {
+            template:'<h3>注册</h3>'
+        }
+        var router = new VueRouter({
+            routes: [
+                {
+                    path:'/account', 
+                    component: account,
+                    children: [
+                        //path属性不要带斜杠，否则永远以根目录进行请求，这样不方用户理解URL
+                        {path:'login', component:login},
+                        {path:'register', component:register}
+                    ]
+
+                },
+                /*
+                    {path:'/account/login', component:login},
+                    {path:'/account/register', component:register}
+                */
+
+            ]
+        })
+        var vm = new Vue({
+            el: '#app',
+            data: {
+
+            },
+            methods: {
+                
+            } ,
+            router
+        })
+    </script>
+</body>
+</html>

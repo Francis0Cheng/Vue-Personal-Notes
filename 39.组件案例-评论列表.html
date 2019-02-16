@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue.js"></script>
+    <link rel="stylesheet" href="./lib/bootstrap.css">
+</head>  
+<body>
+    <div id="app">
+        <comment-box @update="loadComments">
+
+        </comment-box>
+        <ul class="list-group">
+            <li class="list-group-item" v-for="item in list" :key="item.id">
+                <span class="badge">评论人:{{ item.user }}</span>
+                {{ item.content }}
+            </li>
+        </ul>
+        
+    </div>
+    <template id='temp1' >
+        <div>
+            <div class="form-group">
+                <label>评论人：</label>
+                <input type="text"  class="form-control" v-model="user">
+            </div>
+            <div class="form-group">
+                <label>评论内容：</label>
+                <textarea class="form-control" v-model="content"></textarea>
+            </div>
+            <div class="form-group" >
+                <input type="button" value="发表评论" class="btn btn-primary" @click="postComment">
+            </div>
+        </div>
+    </template>
+    <script>
+        var commentBox = {
+            template: '#temp1',
+            data(){
+                return {
+                    user: '',
+                    content: ''
+                }
+            },
+            methods: {
+                postComment(){
+                    /* 
+                        
+                        1.评论数据村到哪里去？？？ 存放到了localStorage中
+                        2.先组织出一个最新的评论数据对象
+                        3.把第二步中得到的评论对象保存到localStorage中
+                            3.1  localStorage中只支持存放字符串数据, 要先调用JSON.stringfy
+                            3.2  在保存最新的评论数据之前，要从localStorage获取之前的评论数据。转化为一个数组对象。然后吧最新的数据push进去
+                            3.3  如果获取到的localStorage中的评论字符串为空，则可以返回一个'[]'让JSON.parse去转换
+                            3.4  把最新评论列表数组再次调用JSON.stringfy 转化为 数组字符串然后调用localStringfy。
+                            
+                    */
+                    var comment = {id: Date.now(), user: this.user, content: this.content}
+
+                    var list = JSON.parse(localStorage.getItem('cmts' || '[]'))
+                    list.unshift(comment)
+                    localStorage.setItem('cmts', JSON.stringify(list))
+
+                    this.user = this.content = ''
+                    this.$emit('update')
+                    
+                }
+            },
+        }
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                list: [
+                 {id: Date.now(), user:'李白', content: '天生我才必有用'},
+                 {id: Date.now(), user:'林则徐', content:'岂因祸福避趋之'},
+                 {id: Date.now(), user:'蛤', content:'苟利国家生死以'}
+                ]
+            },
+            created() {
+                this.loadComments()
+            },
+            methods: {
+                loadComments(){
+                    var list = JSON.parse(localStorage.getItem('cmts' || '[]'))
+                    this.list = list
+                }    
+            },
+            components:{
+                'comment-box':commentBox
+            }
+
+        })
+    </script>
+    
+</body>
+</html>

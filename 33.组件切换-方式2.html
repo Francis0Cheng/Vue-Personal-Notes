@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="./lib/vue.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <a href="" @click.prevent="comName='login'">登陆</a>
+        <a href="" @click.prevent="comName='signup'">注册</a>
+        <!--Vue提供的元素来展示对应名称的组件 -->
+        <!--conponent是一个占位符， :is属性可以用来指定要展示的组件的名称 -->
+        <component :is="comName"></component>
+    </div>
+    <!--总结：当前学习了几个Vue提供的标签-->
+    <!--component, template, transition, transitionGroup-->
+    <script>
+
+        Vue.component(
+            'login',
+            {
+                template: '<h3>登陆组件</h3>',
+
+            }
+        )
+        Vue.component(
+            'signup',
+            {
+                template: '<h3>注册组件</h3>'
+            }
+        )
+        var vm = new Vue(
+            {
+                el: '#app',
+                data: {
+                    comName: 'login'
+                },
+                methods: {
+
+                },
+            }
+        )
+    </script>
+</body>
+
+</html>

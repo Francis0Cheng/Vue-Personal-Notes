@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue.js"></script>
+    <link rel="stylesheet" href="./lib/boot-strap.css">
+</head>
+<body>
+    <div id="app">
+        
+        <div class="panel panel-primary">
+              <div class="panel-heading">
+                    <h3 class="panel-title">Add Brand </h3>
+              </div>
+              <div class="panel-body form-inline">
+                    <label>
+                        ID:
+                        <input type="text" class="form-control" v-model="id">
+                    </label>    
+                    <label>
+                        Name:
+                        <input type="text" class="form-control" v-model="name">
+                    </label> 
+                    <label>
+                    <input type="button" value="Add" class="btn btn-primary" @click="add">
+                    </label>
+                    <label>
+                        Search keywords
+                        <input type="text" class="form-control" v-model="keywords">
+                    </label>
+              </div>
+        </div>
+        
+        
+        <table class="table table-hover table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Ctime</th>
+                    <th>Operation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!--之前，v-for中的数据都是直接从data上的list中直接渲染过来的-->
+                <!--现在我们自定义了一个search方法，同时把所有关键字，通过传参的形式传递给了search方法-->
+                <!--在search方法内部，通过执行for循环，把所有符合搜索关键词的数据保存到一个新的数组中，返回-->
+                <tr v-for="item in search(keywords)" :key="item.id">
+                    <td>{{item.id}}</td>
+                    <td v-text="item.name"></td>
+                    <td>{{item.ctime}}</td>
+                    <td>
+                        <a href="" @click.prevent="del(item.id)" >Delete</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+    </div>
+    <script>
+        var vm = new Vue(
+            {
+                el: '#app',
+                data:{
+                    id: "",
+                    name: "",
+                    keywords:'',
+                    list: [
+                    {id:1, name:"宝马", ctime: new Date()},
+                    {id:2, name:"奔驰", ctime: new Date()},
+                    ]    
+                },
+                methods: {
+                    add(){
+                        // 1获取到id和name,直接从data上获取
+                        // 2组织出一个对象
+                        // 3调用相关数组方法， 添加到data上的list中
+                        // 4在vue中已经实现了数据的双向绑定，每当我们修改了data中的数据，VUe会监听到数据的改动，自动把更新的数据应用到应用上
+                        var car = {id:this.id, name:this.name, ctime:new Date()}
+                        this.list.push(car) 
+                        this.id=this.name=''
+                    },
+                    del(id){
+                        //1如歌根据id找到删除这一项的索引
+                        //2直接调用数组的splice方法
+                        this.list.some((item, i)=>{
+                            if(item.id==id){
+                                //在数组的some方法中。如果return true，就会立即终止这个后续循环
+                                this.list.splice(i, 1)
+                                return ture;
+                            }
+                        })
+                    },
+                    search(keywords){
+                        var newList = []
+                        //For each some filter findIndex这些都属于数组的新方法
+                        //都会对数组中的每一项进行遍历
+
+
+                        /*
+                        方法一
+                        this.list.forEach(item=>{
+                            if(item.name.indexOf(keywords)!=-1){
+                                newList.push(item)
+                            }
+                        })
+                        return newList
+                        */
+
+                        //方法二
+                        //在ES6中，为字符串提供了一个新的方法。String.prototype.includes('要包含合法的字符串')
+                        //如果包含，则返回true，否则返回false
+                         // contain
+                        var newList = this.list.filter(item=>{
+                            if(item.name.includes(keywords)){
+                                return item
+                            }
+                        })
+                        return newList
+                    }
+                  
+        }
+    }
+        );
+    </script>
+</body>
+</html>

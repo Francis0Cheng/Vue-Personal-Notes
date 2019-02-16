@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="./lib/vue-2.4.0.js"></script>
+  <link rel="stylesheet" href="./lib/bootstrap-3.3.7.css">
+</head>
+
+<body>
+  <div id="app">
+
+
+    <cmt-box @func="loadComments"></cmt-box>
+
+
+    <ul class="list-group">
+      <li class="list-group-item" v-for="item in list" :key="item.id">
+        <span class="badge">评论人： {{ item.user }}</span>
+        {{ item.content }}
+      </li>
+    </ul>
+
+
+  </div>
+
+
+  <template id="tmpl">
+    <div>
+
+      <div class="form-group">
+        <label>评论人：</label>
+        <input type="text" class="form-control" v-model="user">
+      </div>
+
+      <div class="form-group">
+        <label>评论内容：</label>
+        <textarea class="form-control" v-model="content"></textarea>
+      </div>
+
+      <div class="form-group">
+        <input type="button" value="发表评论" class="btn btn-primary" @click="postComment">
+      </div>
+
+    </div>
+  </template>
+
+  <script>
+
+    var commentBox = {
+      data() {
+        return {
+          user: '',
+          content: ''
+        }
+      },
+      template: '#tmpl',
+      methods: {
+        postComment() { // 发表评论的方法
+          // 分析：发表评论的业务逻辑
+          // 1. 评论数据存到哪里去？？？   存放到了 localStorage 中  localStorage.setItem('cmts', '')
+          // 2. 先组织出一个最新的评论数据对象
+          // 3. 想办法，把 第二步中，得到的评论对象，保存到 localStorage 中：
+          //  3.1 localStorage 只支持存放字符串数据， 要先调用 JSON.stringify 
+          //  3.2 在保存 最新的 评论数据之前，要先从 localStorage 获取到之前的评论数据（string）， 转换为 一个  数组对象， 然后，把最新的评论， push 到这个数组
+          //  3.3 如果获取到的 localStorage 中的 评论字符串，为空不存在， 则  可以 返回一个 '[]'  让 JSON.parse 去转换
+          //  3.4  把 最新的  评论列表数组，再次调用 JSON.stringify 转为  数组字符串，然后调用 localStorage.setItem()
+
+          var comment = { id: Date.now(), user: this.user, content: this.content }
+
+          // 从 localStorage 中获取所有的评论
+          var list = JSON.parse(localStorage.getItem('cmts') || '[]')
+          list.unshift(comment)
+          // 重新保存最新的 评论数据
+          localStorage.setItem('cmts', JSON.stringify(list))
+
+          this.user = this.content = ''
+
+          // this.loadComments() // ?????
+          this.$emit('func')
+        }
+      }
+    }
+
+    // 创建 Vue 实例，得到 ViewModel
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        list: [
+          { id: Date.now(), user: '李白', content: '天生我材必有用' },
+          { id: Date.now(), user: '江小白', content: '劝君更尽一杯酒' },
+          { id: Date.now(), user: '小马', content: '我姓马， 风吹草低见牛羊的马' }
+        ]
+      },
+      beforeCreate(){ // 注意：这里不能调用 loadComments 方法，因为在执行这个钩子函数的时候，data 和 methods 都还没有被初始化好
+
+      },
+      created(){
+        this.loadComments()
+      },
+      methods: {
+        loadComments() { // 从本地的 localStorage 中，加载评论列表
+          var list = JSON.parse(localStorage.getItem('cmts') || '[]')
+          this.list = list
+        }
+      },
+      components: {
+        'cmt-box': commentBox
+      }
+    });
+  </script>
+</body>
+
+</html>

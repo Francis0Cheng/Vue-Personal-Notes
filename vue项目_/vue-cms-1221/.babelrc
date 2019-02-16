@@ -1,0 +1,4 @@
+{
+  "plugins": ["transform-runtime", "transform-remove-strict-mode"],
+  "presets": ["env", "stage-0"]
+}

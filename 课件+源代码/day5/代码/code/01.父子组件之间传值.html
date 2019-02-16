@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="./lib/vue-2.4.0.js"></script>
+</head>
+
+<body>
+  <div id="app">
+
+    <com1 v-bind:parentmsg="msg" @func="getMsgFormSon"></com1>
+
+  </div>
+
+
+  <template id="tmpl">
+    <div>
+      <h1>这是子元素 --- {{ parentmsg }}</h1>
+      <input type="button" value="向父组件传递消息" @click="sendMsg">
+    </div>
+  </template>
+
+  <script>
+
+    var com1 = {
+      template: '#tmpl',
+      data() {
+        return {
+          msg: '做一个孝顺的孩子，给爸爸一些钱去挥霍吧！'
+        }
+      },
+      props: ['parentmsg'],
+      methods: {
+        sendMsg() {
+          this.$emit('func', this.msg)
+        }
+      }
+    }
+
+    // 创建 Vue 实例，得到 ViewModel
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        msg: '这是父组件中的数据，爸爸有100块钱，my son, 你要不',
+        msgFormSon: ''
+      },
+      methods: {
+        getMsgFormSon(data) {
+          this.msgFormSon = data
+          console.log(this.msgFormSon)
+        }
+      },
+      components: {
+        com1
+      }
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue.js"></script>
+</head>
+<body>
+    <div id="app"> 
+        <input type="button" value="Move" @click='move'>
+        <input type="button" value="Stop" @click='stop'>
+        <h3>{{ msg }}</h3>
+    </div>
+
+    <pre>
+        <h2>
+            1 用v-on 给Move 按钮绑定一个时间
+            2 在按钮的事件处理函数中，写相关的业务逻辑代码
+            拿到msg字符串，进行截取操作调用字符串的substring方法，进行字符的截取放到最后一个位置
+            3 为了实现点击按钮自动截取的功能需要把 2 步骤的代码放到一个定时器中去
+        </h2>
+    </pre>
+    <script>
+       
+            
+
+          
+        var vm = new Vue(
+            /*
+                在VM实例中， 如果想要调用data中的数据或者想要调用methods中的方法必须通过 this.数据属性名
+            或 this.方法名来进行访问，这里的this表示new出来的VM实例
+            */
+            {
+                el: '#app',
+                data:{
+                    msg: 'Hello Vue',
+                    intervalId:null //在data上定义定时器id
+                },
+                methods: {
+                    move(){ 
+                        
+                        if(this.intervalId) return; 
+                        this.intervalId =  setInterval(() => {       //箭头函数内部的this指针和外部的this始终保持一致  
+                            var start = this.msg.substring(0, 1)
+                            var end = this.msg.substring(1)
+                            this.msg = end + start;
+                        }, 400)
+                    },
+                    stop(){
+                        clearInterval(this.intervalId)
+                        /*每当清除之后重新赋值为null，否则开启定时器的是否为null判断会出问题*/
+                        this.intervalId = null 
+                    }
+                    
+                },
+            }
+        )
+    </script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="./lib/vue-2.4.0.js"></script>
+  <!-- 注意：vue-resource 依赖于 Vue，所以先后顺序要注意  -->
+  <!-- this.$http.jsonp -->
+  <script src="./lib/vue-resource-1.3.4.js"></script>
+</head>
+
+<body>
+  <div id="app">
+    <input type="button" value="get请求" @click="getInfo">
+    <input type="button" value="post请求" @click="postInfo">
+    <input type="button" value="jsonp请求" @click="jsonpInfo">
+  </div>
+
+  <script>
+    // 创建 Vue 实例，得到 ViewModel
+    var vm = new Vue({
+      el: '#app',
+      data: {},
+      methods: {
+        getInfo() { // 发起get请求
+          //  当发起get请求之后， 通过 .then 来设置成功的回调函数
+          this.$http.get('http://vue.studyit.io/api/getlunbo').then(function (result) {
+            // 通过 result.body 拿到服务器返回的成功的数据
+            // console.log(result.body)
+          })
+        },
+        postInfo() { // 发起 post 请求   application/x-wwww-form-urlencoded
+          //  手动发起的 Post 请求，默认没有表单格式，所以，有的服务器处理不了
+          //  通过 post 方法的第三个参数， { emulateJSON: true } 设置 提交的内容类型 为 普通表单数据格式
+          this.$http.post('http://vue.studyit.io/api/post', {}, { emulateJSON: true }).then(result => {
+            console.log(result.body)
+          })
+        },
+        jsonpInfo() { // 发起JSONP 请求
+          this.$http.jsonp('http://vue.studyit.io/api/jsonp').then(result => {
+            console.log(result.body)
+          })
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>

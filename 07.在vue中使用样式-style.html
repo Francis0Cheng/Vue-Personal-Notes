@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!--
+            对象就是无序键值对的集合  
+            如果属性中包含`-`就必须要加单引号   
+        -->
+        直接在:style中书写
+         <h1 :style="{color:'red', 'font-weight': 200 }">This is a h1</h1>
+
+        定义在data中
+         <h1 :style="styleObj1">This is a h1</h1>
+
+        用数组的形式，将多个style放入其中
+         <h1 :style="[styleObj1, styleObj2]">This is a h1</h1>
+    </div>
+
+    <script>
+        var c = new Vue(
+            {
+              el:'#app',
+              data:{
+                styleObj1:{
+                    color: 'red',
+                    'font-weight': 200
+                },
+                styleObj2:{
+                    'font-style': 'italic',
+                }
+              },
+              methods: {
+                  
+              },
+            }
+        )
+    </script>
+</body>
+</html>

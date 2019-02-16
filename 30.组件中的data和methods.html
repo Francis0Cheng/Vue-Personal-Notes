@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <comp1>
+
+        </comp1>
+    </div>
+    <script>
+        // 1 租价可以有自己的data数据
+        // 2 组件的data必须是一个方法，并且方法必须返回一个对象
+        // 3 组件中的data数据使用方法和实例中的data使用方法是一样的
+        Vue.component('comp1',{
+            template:'<h1>This s comp1 ---{{msg}}</h1>',
+            data: function(){
+                return {
+                    msg: '这是组件中的data定义的数据' 
+                }
+            }
+        })
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                
+            },
+            methods: {
+                
+            },
+        })
+    </script>
+</body>
+</html>

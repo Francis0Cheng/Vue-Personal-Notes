@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue.js"></script>
+    <link rel="stylesheet" href="./lib/boot-strap.css">
+</head>
+
+<body>
+    <div id="app">
+
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Add Brand </h3>
+            </div>
+            <div class="panel-body form-inline">
+                <label>
+                    ID:
+                    <input type="text" class="form-control" v-model="id">
+                </label>
+                <label>
+                    Name:
+                    <!--键盘修饰符，可以直接用键盘码代替-->
+                    <input type="text" class="form-control" v-model="name" @keyup.113="add()" >
+                </label>
+                <label>
+                    <input type="button" value="Add" class="btn btn-primary" @click="add">
+                </label>
+                <label>
+                    Search keywords
+                    <!--Vue中所有指令，在调用的时候都以 v- 开头-->
+                    <input type="text" class="form-control" v-model="keywords" id="search" v-focus v-color="'blue'">  <!--注意这边传入一个字符串，blue需要单引号的-->
+                </label>
+            </div>
+        </div>
+
+
+        <table class="table table-hover table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Ctime</th>
+                    <th>Operation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!--之前，v-for中的数据都是直接从data上的list中直接渲染过来的-->
+                <!--现在我们自定义了一个search方法，同时把所有关键字，通过传参的形式传递给了search方法-->
+                <!--在search方法内部，通过执行for循环，把所有符合搜索关键词的数据保存到一个新的数组中，返回-->
+                <tr v-for="item in search(keywords)" :key="item.id">
+                    <td>{{item.id}}</td>
+                    <td v-text="item.name"></td>
+                    <td>{{item.ctime | dateFormat()}}</td>
+                    <td>
+                        <a href="" @click.prevent="del(item.id)">Delete</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <div id='app2'>
+        <h3 v-fontweight='900' v-fontsize="'15px'">
+            {{dt | dateFormat('')}}
+        </h3>
+    </div>
+    <script>
+        //全局过滤器，进行时间的格式化
+        Vue.filter('dateFormat', function(dateStr, pattern='yyyy-mm-dd'){
+            //根据给定的时间字符串，得到特定的事件
+
+            var dt = new Date(dateStr)
+            // yyyy-mm-dddd
+            var y = dt.getFullYear()
+            var m = dt.getMonth() + 1
+            var d = dt.getDate()
+
+            if(pattern && pattern.toLowerCase() == 'yyyy-mm-dd')
+            {
+                return `${y} - ${m} - ${d}`
+            }
+            else{
+                var hh = dt.getHours()
+                var mm = dt.getMinutes()
+                var ss = dt.getSeconds()
+                return `${y} ${m} ${d} ${hh}:${mm}:${ss}`
+            }
+        })
+        /*使用Vue.directiive()定义全局的指令
+        其中：参数1：指令的名称，之一在定义的时候，指令的名称前 面不需要加 v- 前缀， 但是在调用的时候必须加v-
+              参数2：是一个对象，在这个对象上，有一些指令相关函数，这些函数可以在特定阶段，执行相关的操作
+        */
+        
+        Vue.directive('focus', {
+            //注意在每个函数中，第一个参数永远是el表示被绑定了指令的哪个元素，这个el是元素的js对象  
+            bind: function(el){//每当指令绑定到元素上的时候，会立即执行，只执行一次
+                //在元素绑定了指令时候，还没有插入到DOM中去，这时候调用focus方法没有作用。因为这个元素只有在插入DOM之后才能获取焦点。
+
+            },
+            inserted: function(el){// 元素插入到DOM中的时候，会执行inserted函数，触发一次
+                el.focus()
+            },
+            updated(el) {//当VNode更新的时候，会执行updated，可能会触发多次
+                
+            },
+        })
+
+        Vue.directive('color', {
+            //样式只要通过指令绑定给了元素，不管这个元素有没有被插入到页面之中去，这个元素肯定有了一个内联的样式
+            //和样式有关的，一般可以在bind中执行
+            bind:function(el , binding){
+                el.style.color = binding.value
+            },
+            inserted: function(el){
+                
+            },
+            updated: function(el){
+                
+            }
+        })
+        //自定义全局按键修饰符
+        Vue.config.keyCodes.f2 = 113
+
+        var vm = new Vue(
+            {
+                el: '#app',
+                data: {
+                    id: "",
+                    name: "",
+                    keywords: '',
+                    list: [
+                        { id: 1, name: "宝马", ctime: new Date() },
+                        { id: 2, name: "奔驰", ctime: new Date() },
+                    ]
+                },
+                methods: {
+                    add() {
+                        var car = { id: this.id, name: this.name, ctime: new Date() }
+                        this.list.push(car)
+                        this.id = this.name = ''
+                    },
+                    del(id) {
+                        this.list.some((item, i) => {
+                            if (item.id == id) {
+                                this.list.splice(i, 1)
+                                return ture;
+                            }
+                        })
+                    },
+                    search(keywords) {
+                        var newList = this.list.filter(item => {
+                            if (item.name.includes(keywords)) {
+                                return item
+                            }
+                        })
+                        return newList
+                    }
+
+                }
+            }
+        );
+        //过滤器的定义语法
+        //Vue('过滤器名称', function(){})
+        //过滤器中的function，第一个参数已经被定死了，永远都是过滤器管道符传递过来的数据
+        /*
+        Vue.filter('过滤器的名称', function(data){
+            return data+'123'
+        })
+        */
+
+        //如何定义一个字有的过滤器
+        var vm2 = new Vue({
+            el: '#app2',
+            data: {
+                dt: Date()
+            },
+            methods: {
+
+            },
+            filters:{
+                // 定义私有过滤器
+                dateFormat: function(dateStr, pattern)
+                {
+                    var dt = new Date(dateStr) //转化
+                    
+                    var y = dt.getFullYear()
+                    var m = (dt.getMonth()).toString().padStart(2, '0')  //用String的padStart方法补齐
+                    var d = (dt.getDate()).toString().padStart(2,'0')
+                    if (pattern.toLowerCase()=='yyyy-mm-dd')
+                    {
+                        return `${y}-${m}-${d}`
+                    }else
+                    {
+                        var hh = dt.getHours()
+                        var mm = dt.getMinutes()
+                        var ss = dt.getSeconds()
+                        return `${y}-${m}-${d} ${hh}:${mm}:${ss} 私有`
+                    }
+                }
+            },
+            directives:{
+
+                'fontweight': function(el, binding){
+                    el.style.fontWeight=binding.value
+                },
+                //简写
+                'fontsize': function(el, binding){
+                    //注意这个function相当于把这个代码写进bind和update中去
+                    el.style.fontSize=parseInt(binding.value) + 'px'
+                }
+            }
+        })
+
+
+        //document.getElementById('search').focus()
+    </script>
+</body>
+
+</html>
+
+
+
+
+<!--自定义指令-->

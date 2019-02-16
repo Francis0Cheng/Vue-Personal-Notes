@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <script src="./lib/vue.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      v-for循环数组
+      <p v-for="(item, i) in list1">{{item}}------index:{{i}}</p>
+
+      v-for循环对象数组
+      <p v-for="usr in list2">index:{{ usr.id }}------name:{{ usr.name }}</p>
+
+      v-for循环对象
+      <p v-for="(val, key, index) in user">value:{{val}}-------key:{{key}}------index:{{index}}</p>
+    </div>
+    <script>
+      var vm = new Vue({
+          el: '#app',
+          data: {
+              list1:[1,2,3,4,5,6],
+
+              list2:[
+              {id:1, name:'a'},
+              {id:2, name:'b'},
+              {id:3, name:'c'},
+              {id:4, name:'d'},
+              ],
+
+              user:{
+                  id:1,
+                  name:'Francis',
+                  gender: 'male',
+
+              }
+          },
+
+      })
+    </script>
+  </body>
+</html>

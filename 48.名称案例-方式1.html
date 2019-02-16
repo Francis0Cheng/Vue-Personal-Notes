@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!--1 我们要监听到文本框数据的改变， 这样才知道什么时候去拼接出一个fullName-->
+        <!--2 如何监听到文本框数据的改变 keyup事件-->
+        <!---->
+        <input type="text" v-model="firstName" @keyup='getFullName'> + 
+        <input type="text" v-model="lastName" @keyup='getLastName'> = 
+        <input type="text"  v-model="fullName">
+        
+    </div>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                firstName: '',
+                lastName: '',
+                fullName: ' ', 
+            },
+            methods: {
+                getFullName(){
+                    this.fullName = this.firstName + ' ' +  this.lastName
+                },
+                getLastName(){
+                    this.fullName = this.firstName + ' ' + this.lastName
+                }
+            },
+
+        })
+    </script>
+</body>
+</html>

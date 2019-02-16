@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue.js"></script>
+    <script src="./lib/vue-router.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!--如果在路由中使用查询字符串，给路由传递参数，则不需要路由规则的path属性-->
+        <router-link to='/login?id=10&name=哈哈'>
+            登陆
+        </router-link>
+
+        <router-link to="/register">
+            注册
+        </router-link>
+        <router-view>
+            
+        </router-view>
+    </div>
+    
+
+    <script>
+        var login= {
+            template: '<h1>登陆 {{$route.query.id}}  {{$route.query.name}}</h1>',
+            data(){
+                return {
+
+                }
+            },
+            created() { //组件生命周期钩子函数
+                console.log(this.$route.query.id) 
+            },
+        }
+        var register = {
+            template: '<h1>注册</h1>'
+        }
+        var router = new VueRouter({
+            routes: [
+                { path: '/login', component: login },
+                { path: '/register', component: register }
+            ]
+        })
+        var vm = new Vue({
+            el : '#app',
+            data: {
+
+            },
+            methods: {
+                
+            },
+            router, 
+        })
+      
+    </script>
+</body>
+</html>

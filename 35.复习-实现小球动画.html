@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="./lib/vue.js"></script>
+    <title>Document</title>
+    <style>
+        .ball{
+            background-color: red;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <input type="button" value="加入购物车" @click="flag=!flag">
+        <transition
+        @before-enter="beforeEnter"
+        @enter="enter"
+        @after-enter="afterEnter">
+        <div class="ball" v-show="flag"></div>
+        </transition>
+    </div>
+    <script>
+
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                flag:false,
+            },
+            methods: {
+                beforeEnter(el){
+                    el.style.transform= 'translate(0,0)'
+                },
+               
+                enter(el, done){
+                    el.offsetWidth
+                    el.style.transform = 'translate(150px,450px)'
+                    el.style.transition = 'all 1s ease'
+                    
+                    done()
+                },
+                afterEnter(el){
+                    //这句话第一个功能是公职小球的显示与隐藏
+                    //第二个功能，直接跳过后半场 ，让flag标识符直接变为false
+                    //当第二次再点击按钮的时候 flag= flase -> true
+                    //也就做到了每次只进行上半段
+                    this.flag=!this.flag
+                    /*Vue 把一个完整的动画，使用钩子函数拆分为两个部分
+                      我们使用flag标识符，来表示动画的切换
+                      上半场flag= flase -> true
+                      下半场flag= true -> false
+                    */
+                }          
+            },
+        })
+    </script>
+</body>
+</html>

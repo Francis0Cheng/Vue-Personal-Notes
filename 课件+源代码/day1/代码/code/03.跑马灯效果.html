@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <!-- 1. 导入Vue包 -->
+  <script src="./lib/vue-2.4.0.js"></script>
+</head>
+
+<body>
+  <!-- 2. 创建一个要控制的区域 -->
+  <div id="app">
+    <input type="button" value="浪起来" @click="lang">
+    <input type="button" value="低调" @click="stop">
+
+    <h4>{{ msg }}</h4>
+
+  </div>
+
+  <script>
+    // 注意：在 VM实例中，如果想要获取 data 上的数据，或者 想要调用 methods 中的 方法，必须通过 this.数据属性名  或  this.方法名 来进行访问，这里的this，就表示 我们 new 出来的  VM 实例对象
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        msg: '猥琐发育，别浪~~！',
+        intervalId: null // 在data上定义 定时器Id
+      },
+      methods: {
+        lang() {
+          // console.log(this.msg)
+          // 获取到头的第一个字符
+          // this
+
+          if (this.intervalId != null) return;
+
+          this.intervalId = setInterval(() => {
+            var start = this.msg.substring(0, 1)
+            // 获取到 后面的所有字符
+            var end = this.msg.substring(1)
+            // 重新拼接得到新的字符串，并赋值给 this.msg
+            this.msg = end + start
+          }, 400)
+
+          // 注意： VM实例，会监听自己身上 data 中所有数据的改变，只要数据一发生变化，就会自动把 最新的数据，从data 上同步到页面中去；【好处：程序员只需要关心数据，不需要考虑如何重新渲染DOM页面】
+        },
+        stop() { // 停止定时器
+          clearInterval(this.intervalId)
+          // 每当清除了定时器之后，需要重新把 intervalId 置为 null
+          this.intervalId = null;
+        }
+      }
+    })
+
+
+    // 分析：
+    // 1. 给 【浪起来】 按钮，绑定一个点击事件   v-on   @
+    // 2. 在按钮的事件处理函数中，写相关的业务逻辑代码：拿到 msg 字符串，然后 调用 字符串的 substring 来进行字符串的截取操作，把 第一个字符截取出来，放到最后一个位置即可；
+    // 3. 为了实现点击下按钮，自动截取的功能，需要把 2 步骤中的代码，放到一个定时器中去；
+  </script>
+</body>
+
+</html>

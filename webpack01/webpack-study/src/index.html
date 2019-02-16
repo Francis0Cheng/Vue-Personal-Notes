@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./main.js "></script>
+    <!--注意：不推荐直接在这里引用任何包和任何css文件-->
+
+    
+    <!-- <script src="./main.js"></script> -->
+    <!--因为main中的代码涉及到ES6中新语法，但是浏览器识别不到-->
+    <!--通过webpack的前端构建工具，把main.js做了处理，生成了bundle.js文件-->
+    <!-- <script src="../dist/bundle.js"></script> -->
+    <!--当使用html-webpack-plugin之后，我们不在需要手动处理bundle.js的引用路径了，因为这个插件已经帮我们创建了一个合适的script并且引用了正确路径-->
+    <script src="/bundle.js"></script>
+
+    <!--css会发起二次请求，不推荐-->
+    <!-- <link rel="stylesheet" href="./css/index.css"> -->
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.css">
+
+</head>
+<body>
+    <ul>
+        <li>这是第1个li</li>
+        <li>这是第2个li</li>
+        <li>这是第3个li</li>
+        <li>这是第4个li</li>
+        <li>这是第5个li</li>
+
+
+
+        <div class="box">
+
+        </div>
+        <div class="box2">
+        
+        </div>
+
+        <span class="glyphicon glyphicon-eur" aria-hidden="true"></span>
+    </ul>
+</body>
+</html>

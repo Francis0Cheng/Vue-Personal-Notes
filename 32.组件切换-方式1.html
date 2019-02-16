@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="./lib/vue.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <a href="" @click.prevent="flag=true" >Login</a>
+        <a href="" @click.prevent="flag=false">Sign Up</a>
+        <login  v-if="flag">
+
+        </login>
+        <signup v-else="flag">
+            
+        </signup>
+    </div>
+    <script>
+
+        Vue.component(
+            'login',
+            {
+                template:'<h3>登陆组件</h3>',
+                 
+            }
+        )
+        Vue.component(
+            'signup',
+            {
+                template:'<h3>注册组件</h3>'
+            }
+        )
+        var vm = new Vue(
+            {
+                el:'#app',
+                data: {
+                    flag:'ture'
+                },
+                methods: {
+                    
+                },
+            }
+        )
+    </script>
+</body>
+</html>

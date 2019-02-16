@@ -1,0 +1,16 @@
+html, body{
+  .box{
+    width: 220px;
+    height: 120px;
+    // 默认情况下，webpack 无法 处理 CSS 文件中的 url 地址，不管是图片还是 字体库， 只要是 URL 地址，都处理不了
+    background: url('../images/生小孩.jpg');
+    background-size: cover;
+  }
+
+  .box2{
+    width: 220px;
+    height: 120px;
+    background: url('../images2/生小孩.jpg');
+    background-size: cover;
+  }
+}
